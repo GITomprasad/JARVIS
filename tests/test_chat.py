@@ -53,6 +53,14 @@ def test_root_endpoint():
     data = response.json()
     assert data["status"] == "online"
     assert "docs_url" in data
+    assert "web_app_url" in data
+
+
+def test_web_app_endpoint():
+    """Verify web frontend HTML is served at /app/."""
+    response = client.get("/app/")
+    assert response.status_code == 200
+    assert "J.A.R.V.I.S." in response.text
 
 
 def test_health_check():

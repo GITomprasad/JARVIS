@@ -55,12 +55,22 @@ app.include_router(health_router)
 app.include_router(chat_router)
 
 
+from pathlib import Path
+from fastapi.staticfiles import StaticFiles
+
+# Mount Web Frontend if directory exists
+frontend_dir = Path(__file__).resolve().parent.parent.parent / "frontend"
+if frontend_dir.is_dir():
+    app.mount("/app", StaticFiles(directory=str(frontend_dir), html=True), name="frontend")
+
+
 @app.get("/", tags=["Root"])
 def root_info():
     """Root endpoint welcoming clients and directing to interactive documentation."""
     return {
         "message": "JARVIS Brain is active.",
         "status": "online",
+        "web_app_url": "/app",
         "docs_url": "/docs",
         "health_url": "/health",
         "chat_endpoint": "/chat"

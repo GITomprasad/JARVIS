@@ -5,6 +5,7 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![Web Interface](https://img.shields.io/badge/Web_UI-Arc_Reactor_HUD-00D2FF?style=for-the-badge&logo=html5&logoColor=white)](http://127.0.0.1:8000/app)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-3.6_Flash-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/)
 [![Anthropic Claude](https://img.shields.io/badge/Claude-3.5_Sonnet-D97706?style=for-the-badge&logo=anthropic&logoColor=white)](https://www.anthropic.com/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4o-412991?style=for-the-badge&logo=openai&logoColor=white)](https://openai.com/)
@@ -12,10 +13,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
 <p align="center">
-  <b>A modular, cross-device personal AI assistant ecosystem powered by a high-throughput FastAPI backend "Brain", stateful sliding-window SQLite memory, multi-provider LLM orchestration (Google Gemini, Claude, GPT-4o, Offline Mock), and an interactive Rich terminal client.</b>
+  <b>A high-performance, modular, multi-device personal AI assistant ecosystem. Powered by a central FastAPI backend "Brain", stateful sliding-window SQLite memory, multi-provider LLM orchestration (Google Gemini, Claude, GPT-4o, Offline Mock), a futuristic Neural Web Interface with animated Arc Reactor HUD & Voice STT, and an interactive Rich terminal client.</b>
 </p>
 
 [Key Features](#-key-features) •
+[Web Interface](#-neural-web-interface-showcase) •
 [Architecture](#-system-architecture) •
 [Quickstart](#-quickstart-guide) •
 [CLI Commands](#-cli-commands) •
@@ -29,14 +31,72 @@
 
 ## 🌟 Key Features
 
-- **🧠 Centralized Intelligence Brain**: High-throughput asynchronous FastAPI backend acting as the single source of truth for conversational state, session management, and LLM orchestration.
-- **🔄 Multi-LLM Provider Engine**: Seamlessly switch between **Google Gemini** (`google-genai` SDK), **Anthropic Claude** (`anthropic` SDK), and **OpenAI** (`openai` SDK) with a single environment variable (`LLM_PROVIDER`).
-- **🛡️ Zero-Config Offline Mock Mode**: Automatic fallback to a deterministic, context-aware mock provider if API keys are missing or invalid—enabling instantaneous offline development and CI testing with zero cloud charges.
-- **💾 Stateful Sliding-Window Memory**: Local SQLite persistence via SQLAlchemy ORM (`jarvis.db`). Automatically retains full conversation history while passing a customizable sliding window of the last *N* turns into the LLM context.
-- **🔀 Multi-Session & Device Awareness**: Partition chats into isolated session streams (e.g. `coding`, `planning`, `daily`) with per-message device attribution (`laptop`, `mobile`, `jarvis_brain`).
-- **💻 Interactive Rich Terminal Client**: Sleek desktop CLI client built with [Rich](https://github.com/Textualize/rich)—complete with formatted panels, rendered Markdown responses, tabular history exploration, session management, and slash commands.
-- **📖 Self-Documenting REST API**: Full interactive OpenAPI documentation generated automatically via Swagger UI (`/docs`) and ReDoc (`/redoc`), alongside diagnostic health checks (`/health`).
-- **🔒 100% Local Data Sovereignty**: All conversation transcripts and state reside locally on your machine in SQLite. Credentials are strictly isolated in `.env`.
+- **🌐 Futuristic Neural Web Interface**: High-tech cyber dashboard featuring an animated rotating **Arc Reactor SVG**, audio waveform animations, and a 4-tab tactical workspace (**Chat**, **Actions**, **Memory**, **System Diagnostics**).
+- **🎙️ Real-time Voice Directives (Speech-to-Text)**: Hands-free voice recognition powered by the browser Web Speech API, embedded inside a glowing breathing reactor mic pill.
+- **🧠 Centralized Intelligence Brain**: Asynchronous FastAPI backend providing unified state management, OpenAPI specifications (`/docs`), automated health monitoring (`/health`), and static web serving at `/app`.
+- **🔄 Multi-LLM Provider Engine**: Hot-swap between **Google Gemini** (`google-genai` SDK / `gemini-3.6-flash`), **Anthropic Claude** (`claude-3-5-sonnet`), and **OpenAI** (`gpt-4o`) via a single `.env` setting (`LLM_PROVIDER`).
+- **🛡️ Zero-Config Offline Mock Mode**: Built-in deterministic mock provider automatically engages if API keys are missing or invalid, enabling instant offline development and automated CI testing with zero cloud fees.
+- **💾 Stateful Sliding-Window Memory**: Local SQLite persistence via SQLAlchemy ORM (`jarvis.db`). Logs complete conversation transcripts while passing a configurable sliding window of the last *N* turns to LLM prompts for long-term dialogue continuity.
+- **🔀 Multi-Session & Device Partitioning**: Isolate workflows into distinct concurrent sessions (e.g. `default`, `coding`, `planning`, `research`) with client device tags (`laptop`, `mobile`, `web_neural_client`, `jarvis_brain`).
+- **🔊 Zero-Dependency Web Audio Synthesizer**: Custom synthesized futuristic HUD sound effects for message transmit, receive, session switching, and memory flush using the browser Web Audio API.
+- **💻 Interactive Rich Terminal Client**: Full-featured desktop CLI built with [Rich](https://github.com/Textualize/rich)—complete with formatted panels, rendered Markdown, tabular history, session switching, and slash commands.
+- **🔒 100% Local Data Sovereignty**: All conversation history resides locally on your machine in SQLite. Zero cloud tracking, zero external database dependencies.
+
+---
+
+## 🖥️ Neural Web Interface Showcase
+
+The Web Interface is served directly from the FastAPI backend at **`http://127.0.0.1:8000/app`** (or can be opened directly as `frontend/index.html`):
+
+```
++-----------------------------------------------------------------------------------+
+|  [⚡ Arc Reactor]  J.A.R.V.I.S.  ● ONLINE      [Session: default]  [🔊]  [AX]     |
++-----------------------------------------------------------------------------------+
+|  Provider: Gemini (gemini-3.6-flash)  |  Context: 4 turns  |  Latency: 0.8s       |
++-----------------------------------------------------------------------------------+
+|                                                                                   |
+|  [CLIENT • 10:41 AM]                                                              |
+|  +-----------------------------------------------------------------------------+  |
+|  | [||| Voice Waveform] Jarvis, summarize today's git commits and open VS Code. |  |
+|  +-----------------------------------------------------------------------------+  |
+|                                                                                   |
+|  [J.A.R.V.I.S. // EXEC • NODE-01 • gemini-3.6-flash]                               |
+|  +-----------------------------------------------------------------------------+  |
+|  | Good morning, Alex. Found 4 commits today across main and feature/chat-memory.  |
+|  | Launching Visual Studio Code in ~/workspace/alex-dev.                       |  |
+|  |                                                                             |  |
+|  | [Copy] ```python                                                            |  |
+|  | def run_diagnostic():                                                       |  |
+|  |     return {"status": "nominal", "subsystems": "online"}                    |  |
+|  | ```                                                                         |  |
+|  +-----------------------------------------------------------------------------+  |
+|                                                                                   |
+|  [Suggested Directives: ⚡ System Status | 🧠 Explain Memory | 💻 Script Gen]    |
+|  +-----------------------------------------------------------------------------+  |
+|  | [ (●) Arc Mic ] > Transmit command to Jarvis...                [ ↑ Send ]   |  |
+|  +-----------------------------------------------------------------------------+  |
++-----------------------------------------------------------------------------------+
+|            [ 💬 Chat ]      [ ⚡ Actions ]      [ 💾 Memory ]      [ ⚙️ System ]     |
++-----------------------------------------------------------------------------------+
+```
+
+### Key Modules in the Web Frontend:
+1. **💬 Chat Tab**:
+   - Live conversational stream with user bubbles and audio waveform animation.
+   - Jarvis operational responses with Markdown rendering and syntax-highlighted code blocks with one-click "Copy Code" buttons.
+   - One-click suggested directive chips.
+   - Voice Input button with Web Speech API integration and pulsing listening states.
+2. **⚡ Actions Tab**:
+   - Diagnostic probes, memory context dumps, test suite query triggers.
+   - Live console telemetry output stream.
+3. **💾 Memory Tab**:
+   - Interactive SQLite transcript explorer displaying all messages stored in `jarvis.db`.
+   - Session switcher & creator (`default`, `coding`, `planning`, `research`).
+   - Atomic session memory flush button (`DELETE /history/{session_id}`).
+4. **⚙️ System Tab**:
+   - Live backend health inspector polling `/health`.
+   - Custom backend URL configuration (connects to localhost, cloud Render, or remote VPS).
+   - System architecture specifications and audio synthesis volume control.
 
 ---
 
@@ -48,12 +108,12 @@
 graph TD
     subgraph Clients ["🖥️ Client Layer"]
         CLI["💻 Laptop Agent<br/>(Rich CLI Client)"]
+        Web["🌐 Neural Web UI<br/>(Arc Reactor / Voice STT)"]
         Mobile["📱 Mobile App<br/>(Flutter - Stage 3)"]
-        Web["🌐 Web Interface<br/>(Future Client)"]
     end
 
     subgraph Backend ["⚡ JARVIS Brain (FastAPI)"]
-        API["FastAPI App (ASGI Engine)<br/>CORS & Lifespan Management"]
+        API["FastAPI App (ASGI Engine)<br/>CORS & Static UI Serving (/app)"]
         RouterChat["/chat & /history Router"]
         RouterHealth["/health & / Router"]
         MemorySvc["Memory Service<br/>(Sliding Window N-Turns)"]
@@ -72,8 +132,8 @@ graph TD
     end
 
     CLI -->|HTTP / REST| API
+    Web -->|HTTP / REST| API
     Mobile -.->|HTTP / REST| API
-    Web -.->|HTTP / REST| API
 
     API --> RouterChat
     API --> RouterHealth
@@ -106,11 +166,12 @@ graph TD
                                      ^               ^          | - Offline Mock    |
                                      |               |          +-------------------+
                        [REST: POST /chat, GET /history, DELETE /history]
-                                     |               |
-                       +-------------------+   +--------------------+
-                       |   Laptop Agent    |   |     Mobile App     |
-                       | (Rich CLI Client) |   | (Flutter - Stage 3)|
-                       +-------------------+   +--------------------+
+                         /           |                      \
+                        v            v                       v
+               +---------------+  +--------------------+  +--------------------+
+               | Neural Web UI |  |    Laptop Agent    |  |     Mobile App     |
+               | (Arc Reactor) |  |  (Rich CLI Client) |  | (Flutter - Stage 3)|
+               +---------------+  +--------------------+  +--------------------+
 ```
 
 ---
@@ -138,9 +199,12 @@ JARVIS/
 │   │   ├── __init__.py
 │   │   ├── config.py              # Application settings, persona, and .env loader
 │   │   ├── database.py            # SQLite engine, sessionmaker, and init_db
-│   │   └── main.py                # FastAPI app, CORS, lifespan, and root handler
+│   │   └── main.py                # FastAPI app, static /app mount, CORS, lifespan
 │   ├── .env.example               # Backend configuration template
 │   └── requirements.txt           # Backend core dependencies
+├── frontend/
+│   ├── index.html                 # Tactical animated HUD interface (Arc Reactor, Voice STT)
+│   └── app.js                     # Real-time API link, Web Audio tones, tab manager
 ├── laptop_agent/
 │   ├── __init__.py
 │   ├── cli.py                     # Rich interactive terminal chat interface
@@ -148,7 +212,7 @@ JARVIS/
 │   └── requirements.txt           # Laptop agent dependencies (rich, requests)
 ├── tests/
 │   ├── __init__.py
-│   └── test_chat.py               # Integration test suite (memory, sessions, health)
+│   └── test_chat.py               # Integration test suite (memory, sessions, health, web)
 ├── .env.example                   # Root environment configuration template
 ├── .env                           # Active environment variables (gitignored)
 ├── .gitignore                     # Repository hygiene & exclusion rules
@@ -251,7 +315,7 @@ JARVIS_BACKEND_URL=http://127.0.0.1:8000
 
 ### 4. Run Automated Tests
 
-Execute the automated pytest suite verifying database persistence, context preservation, session isolation, and health checks:
+Execute the automated pytest suite verifying database persistence, context preservation, session isolation, health checks, and web static serving:
 
 ```bash
 # Run test suite
@@ -277,13 +341,30 @@ python -m uvicorn backend.app.main:app --reload --port 8000
 ```
 
 - 🌐 **Service Root**: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+- ⚡ **Neural Web Interface**: [http://127.0.0.1:8000/app](http://127.0.0.1:8000/app)
 - 🩺 **Health Check**: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
 - 📚 **Swagger UI Docs**: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 - 📖 **ReDoc Documentation**: [http://127.0.0.1:8000/redoc](http://127.0.0.1:8000/redoc)
 
 ---
 
-### 6. Launch the Laptop Agent CLI
+### 6. Access the Neural Web Frontend
+
+Once the backend server is running, open your web browser to:
+👉 **[http://127.0.0.1:8000/app](http://127.0.0.1:8000/app)**
+
+*(You can also double-click and open `frontend/index.html` directly in any browser).*
+
+*Interactive Highlights:*
+- **Animated Arc Reactor**: Real-time rotating tech rings and pulsing core status vector.
+- **Voice Directives (Speech-to-Text)**: Click the glowing reactor mic button to speak directives directly to Jarvis.
+- **Markdown & Code Highlighting**: Syntax-highlighted code blocks with one-click copy buttons.
+- **Multi-Tab Navigation**: Switch between **Chat**, **Actions**, **Memory**, and **System Diagnostics**.
+- **Context Inspection**: Live SQLite message transcript explorer and session switcher (`default`, `coding`, `research`).
+
+---
+
+### 7. Launch the Laptop Agent CLI (Alternative)
 
 In a separate terminal window (with `.venv` active):
 
@@ -427,6 +508,12 @@ Purges all messages for the specified session from SQLite.
 
 ---
 
+### 5. `GET /app` — Web Application Entry Point
+
+Returns the interactive HTML5/CSS3 Neural Web Client interface.
+
+---
+
 ## ⚙️ Configuration Reference
 
 All settings can be customized via `.env` or system environment variables:
@@ -470,10 +557,11 @@ All settings can be customized via `.env` or system environment variables:
 
 ## 🗺️ Project Roadmap
 
-- [x] **Stage 1 — MVP Backend & CLI Agent** *(Current)*
+- [x] **Stage 1 — MVP Backend & Clients** *(Current)*
   - [x] FastAPI asynchronous backend brain
   - [x] SQLite conversation memory with sliding-window context
   - [x] Multi-LLM provider abstraction (Google Gemini, Anthropic Claude, OpenAI, Mock)
+  - [x] Neural Web Interface (Animated Arc Reactor SVG, Voice STT, 4 Tabs, Markdown)
   - [x] Interactive Rich terminal client with slash commands and history viewer
   - [x] Automated pytest integration test suite
 - [ ] **Stage 2 — Local Desktop Actions & Tool Calling**
@@ -489,7 +577,7 @@ All settings can be customized via `.env` or system environment variables:
   - [ ] Proactive morning briefings & weather/calendar integrations
   - [ ] Autonomous trigger-action rules
 - [ ] **Stage 5 — Real-time Voice Pipeline**
-  - [ ] OpenAI Whisper / local STT pipeline
+  - [ ] Local Whisper STT pipeline
   - [ ] Low-latency Text-to-Speech (TTS) voice playback
 
 ---
@@ -502,8 +590,8 @@ To run all unit and integration tests:
 # Run with verbose output
 python -m pytest tests/ -v
 
-# Run with coverage report
-python -m pytest tests/ --tb=short
+# Run fast with mock provider
+LLM_PROVIDER=mock python -m pytest tests/ -v
 ```
 
 ---
