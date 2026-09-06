@@ -29,7 +29,6 @@ class Settings:
     HOST: str = os.getenv("HOST", "0.0.0.0")
     PORT: int = int(os.getenv("PORT", "8000"))
     DEBUG: bool = os.getenv("DEBUG", "True").lower() in ("true", "1", "yes")
-
     # Database
     # Default to a local SQLite database file in the project workspace
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./jarvis.db")
