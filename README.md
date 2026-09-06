@@ -1,162 +1,89 @@
-# ⚡ Personal JARVIS
+# ⚡ JARVIS — Personal AI Operating System
 
-> A modular, multi-device personal AI assistant running across desktop and mobile, powered by a central FastAPI backend "brain", SQLite conversation memory, and Claude/OpenAI LLM APIs.
+<p align="center">
+  <strong>A modular, multi-device personal AI assistant built to listen, reason, remember, and act.</strong>
+</p>
 
----
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.10%2B-blue?style=for-the-badge&logo=python" alt="Python">
+  <img src="https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi" alt="FastAPI">
+  <img src="https://img.shields.io/badge/SQLite-Memory-003B57?style=for-the-badge&logo=sqlite" alt="SQLite">
+  <img src="https://img.shields.io/badge/AI-Claude%20%7C%20OpenAI-purple?style=for-the-badge" alt="AI">
+  <img src="https://img.shields.io/badge/Status-Stage%201%20MVP-success?style=for-the-badge" alt="Status">
+</p>
 
-## 📌 Architecture Overview
-
-```
-                        +----------------------------------------+
-                        |        Central Backend "Brain"         |
-                        |            (FastAPI / Python)          |
-                        +----------------------------------------+
-                               /            |             \
-                              /             |              \
-                             v              v               v
-                +-----------------+  +--------------+  +------------------+
-                | SQLite Database |  |  Memory Svc  |  |  LLM Provider    |
-                |  (jarvis.db)    |  |  (Sliding    |  |  - Anthropic     |
-                |                 |  |   Window N)  |  |  - OpenAI / Mock |
-                +-----------------+  +--------------+  +------------------+
-                             ^              ^
-                             |              |
-                    [REST: POST /chat, GET /history]
-                             |              |
-                +------------------+   +------------------+
-                |   Laptop Agent   |   |    Mobile App    |
-                | (CLI / Actions)  |   | (Flutter - S3)   |
-                +------------------+   +------------------+
-```
+<p align="center">
+  <a href="#-overview">Overview</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-features">Features</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-roadmap">Roadmap</a>
+</p>
 
 ---
 
-## 🏛️ Architectural Decisions & Trade-offs
+## 🧠 Overview
 
-### 1. Database: SQLite vs. PostgreSQL
-- **Stage 1 & 2 Choice**: **SQLite** via SQLAlchemy.
-  - *Pros*: Zero server setup, stored as a single file (`jarvis.db`), sub-millisecond local latency, trivial backups. Perfect for a single-user personal assistant.
-  - *When to migrate to Postgres*: When scaling to multi-user access, or deploying the backend to serverless/container clouds (Render, AWS ECS, Fly.io) where persistent volume mounts are cumbersome compared to managed databases (e.g. Supabase, RDS).
+**JARVIS** is a modular personal AI assistant designed to become a centralized intelligence layer across devices.
 
-### 2. Communication: REST vs. WebSockets
-- **Stage 1 Choice**: **REST API** (`POST /chat`, `GET /history/{session_id}`).
-  - *Pros*: Simple, stateless, easy to inspect with Swagger UI (`/docs`), curl, or any HTTP client.
-  - *When WebSockets will be introduced (Stage 2 & 3)*: In Stage 2, when the backend needs to push structured action execution requests to the laptop agent asynchronously, and for token-by-token streaming responses.
+Instead of being just another chatbot, JARVIS is designed around a simple idea:
 
-### 3. LLM Provider Flexibility & Mock Mode
-- Decoupled `BaseLLMProvider` abstraction supporting **Anthropic Claude (Sonnet)**, **OpenAI (GPT-4o)**, and a built-in deterministic **Mock Provider**.
-- If no API key is provided, the system gracefully falls back to the Mock Provider, allowing immediate offline testing of the memory and client loop without crashing or incurring API charges.
+> **Understand → Remember → Reason → Act**
 
----
+The system uses a central **FastAPI backend ("Brain")** that manages conversations, memory, LLM communication, and future device actions.
 
-## 📁 Project Structure
+JARVIS currently supports:
 
-```
-JARVIS/
-├── backend/
-│   ├── app/
-│   │   ├── config.py              # Environment settings & persona prompt
-│   │   ├── database.py            # SQLite engine & session management
-│   │   ├── main.py                # FastAPI entry point, CORS, lifespan
-│   │   ├── models/
-│   │   │   └── message.py         # SQLAlchemy message model
-│   │   ├── schemas/
-│   │   │   └── chat.py            # Pydantic request/response validation
-│   │   ├── services/
-│   │   │   ├── llm.py             # Claude / OpenAI / Mock provider logic
-│   │   │   └── memory.py          # Sliding-window context & persistence
-│   │   └── routers/
-│   │       ├── chat.py            # /chat, /history endpoints
-│   │       └── health.py          # /health diagnostics endpoint
-│   ├── requirements.txt           # Backend dependencies
-│   └── .env.example               # Configuration template
-├── laptop_agent/
-│   ├── cli.py                     # Interactive rich terminal client
-│   ├── config.py                  # Client configuration
-│   └── requirements.txt           # Client dependencies
-├── tests/
-│   └── test_chat.py               # Automated pytest suite (6 tests)
-├── .env                           # Active environment variables (gitignored)
-├── .gitignore                     # Repository hygiene
-└── README.md                      # Documentation
-```
+- 🤖 Claude / OpenAI / Mock LLM providers
+- 🧠 Persistent conversation memory
+- 💬 Interactive laptop CLI
+- 🌐 REST API
+- 🗄️ SQLite-based storage
+- 🔌 Modular service architecture
+- 🧪 Automated testing with pytest
+- 🔐 Environment-based secret management
+
+The architecture is intentionally designed so that additional devices, tools, automation, and voice capabilities can be added without rewriting the core system.
 
 ---
 
-## 🚀 Quickstart Guide
+# ✨ Features
 
-### Prerequisites
-- Python 3.10+ (tested on Python 3.14 on Windows)
-- (Optional) Anthropic Claude or OpenAI API key
+### 🤖 Multi-LLM Architecture
 
-### 1. Setup Environment
-```bash
-# Clone or open the repository
-cd JARVIS
+JARVIS separates the assistant logic from the underlying AI provider.
 
-# Copy environment template
-cp .env.example .env
-```
+Supported providers include:
 
-Edit `.env` to configure your API keys:
-```ini
-LLM_PROVIDER=anthropic
-ANTHROPIC_API_KEY=sk-ant-...
-LLM_MODEL=claude-3-5-sonnet-20241022
-MAX_HISTORY_MESSAGES=10
-```
-*(If you leave `ANTHROPIC_API_KEY` empty, JARVIS automatically starts in Mock Mode for offline testing).*
+- Anthropic Claude
+- OpenAI
+- Deterministic Mock Provider
 
-### 2. Install Dependencies
-```bash
-python -m pip install -r backend/requirements.txt
-python -m pip install -r laptop_agent/requirements.txt
-```
-
-### 3. Run Automated Tests
-```bash
-python -m pytest tests/ -v
-```
-
-### 4. Start the Backend Brain
-```bash
-python -m uvicorn backend.app.main:app --reload --port 8000
-```
-- Interactive API Documentation: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
-- Health Check: [http://127.0.0.1:8000/health](http://127.0.0.1:8000/health)
-
-### 5. Launch the Laptop Agent CLI
-In a separate terminal:
-```bash
-python laptop_agent/cli.py
-```
+This makes it possible to switch providers without changing the rest of the application.
 
 ---
 
-## 💬 CLI Client Commands
+### 🧠 Persistent Memory
 
-Within the CLI interface (`laptop_agent/cli.py`):
-- `Your query` — Send natural language command to Jarvis
-- `/history` — View the stored conversation transcript
-- `/clear` — Reset conversation memory for the current session
-- `/session <id>` — Switch between different sessions (e.g., `default`, `coding`, `planning`)
-- `/help` — Display list of commands
-- `/exit` — Quit client
+JARVIS stores conversations using SQLite and SQLAlchemy.
 
----
+The memory layer provides:
 
-## 🔒 Security & Safety Notes
+- Conversation persistence
+- Session-based history
+- Sliding-window context
+- Conversation retrieval
+- Memory reset functionality
 
-- **Secrets Isolation**: API keys reside strictly in `.env`, excluded via `.gitignore`.
-- **Local Data Sovereignty**: All conversation history is stored locally in SQLite (`jarvis.db`) on your machine.
-- **Stage 2 Action Pre-Planning**: Ahead of Stage 2 (Local Actions), actions will be constrained by strict directory and executable whitelisting to avoid arbitrary destructive system commands.
+Example:
 
----
-
-## 🗺️ Project Roadmap
-
-- [x] **Stage 1 — MVP**: FastAPI brain, SQLite conversation memory, Claude/OpenAI/Mock provider, laptop CLI agent.
-- [ ] **Stage 2 — Local Actions**: Tool/function calling layer, desktop action executor (`open_app`, `run_script`, `search_files`), command whitelist & sandbox.
-- [ ] **Stage 3 — Mobile App**: Flutter chat client, shared secret authentication, unified cross-device conversation continuation.
-- [ ] **Stage 4 — Automations & Scheduling**: APScheduler background tasks, rule engine (`trigger -> action`), morning briefings and focus mode.
-- [ ] **Stage 5 — Voice**: Modular Whisper speech-to-text and TTS voice pipeline.
+```text
+User
+ ↓
+"Remember that I'm working on a Python project."
+ ↓
+JARVIS
+ ↓
+Memory Service
+ ↓
+SQLite
